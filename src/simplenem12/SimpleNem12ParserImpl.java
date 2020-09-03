@@ -23,16 +23,16 @@ public class SimpleNem12ParserImpl implements SimpleNem12Parser {
 		Collection<MeterRead> meterReadCollection = null;
 		try {
 			
-			//Map all files to MeterRead(s) or MeterVolume(s) 
+			//Map all files to MeterRead(s) or MeterVolume(s)ï¿½
 			List<Object> meterReadAndVolumes =	mapMeterReadAndVolumes(simpleNem12File);
 			
-			// Extract MeterRead and map it into a Collection<MeterRead> 
+			// Extract MeterRead and map it into a Collection<MeterRead>ï¿½
 			meterReadCollection = meterReadAndVolumes
 			.stream().filter(line -> line instanceof MeterRead)
 			.map(line -> ((MeterRead)line))
 			.collect(Collectors.toCollection(ArrayList<MeterRead>::new));
 			
-			//Append volumes  in the appropriate MeterRead
+			//Append volumesï¿½ in the appropriate MeterRead
 			appendVolumesToMeters(meterReadCollection,meterReadAndVolumes);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -42,16 +42,16 @@ public class SimpleNem12ParserImpl implements SimpleNem12Parser {
 
 	
 	/**
-	* Trim  RecordType 100 and 900
-	* Map all lines to MeterRead or MeterVolumes depending record type 200 or 300 
+	* Trimï¿½ RecordType 100 and 900
+	* Map all lines to MeterRead or MeterVolumes depending record type 200 or 300ï¿½
 	* @param simpleNem12File
 	* @return
 	* @throws IOException
 	*/
 	public static List<Object> mapMeterReadAndVolumes(File simpleNem12File) throws IOException{
-		// Trim  RecordType 100 and 900
+		// Trimï¿½ RecordType 100 and 900
 			return Files.lines(Paths.get(simpleNem12File.getPath())).filter(lines -> (!lines.startsWith("100") && !lines.startsWith("900")))
-			// Map all lines to MeterRead or MeterVolumes depending record type 200 or 300 
+			// Map all lines to MeterRead or MeterVolumes depending record type 200 or 300ï¿½
 			.map(lines -> {
 				String linesRead[] = lines.split(",");
 				Object obj = null;
@@ -60,7 +60,7 @@ public class SimpleNem12ParserImpl implements SimpleNem12Parser {
 					obj = new MeterRead(linesRead[1], EnergyUnit.KWH);
 				} else if (linesRead[0].equals("300")) {
 					LocalDate localDate = LocalDate.parse(linesRead[1], formatter);
-					// Either A or  E
+					// Either A orï¿½ E
 					Quality quality = linesRead[3].equals("A") ? Quality.A : Quality.E;
 					MeterVolume aMeterVolume = new MeterVolume(new BigDecimal(linesRead[2]), quality);
 					obj = (Map<LocalDate, MeterVolume>) Collections.singletonMap(localDate,aMeterVolume);
